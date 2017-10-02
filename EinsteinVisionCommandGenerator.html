@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Einstein Platform Services Command Generater</title>
+
+  <style type="text/css">
+  .width100 {
+    white-space: nowrap;
+    width: 100%;
+  }
+  </style>
+</head>
+
+<body>
+  <div id="root">
+    <h1>Einstein Platform Services Command Generater</h1>
+    <h2>Link</h2>
+    <ul>
+      <li>Generate an OAuth Token: <a href="https://api.einstein.ai/token" target="_blank">https://api.einstein.ai/token</a></li>
+    </ul>
+
+    <h2>Parameters</h2>
+    <table class="width100">
+      <tr>
+        <td>
+          OAuth Token
+        </td>
+        <td class="width100">
+          <input id="in_token" class="width100" type="text" onchange="updateCommands();" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Dataset - Label Type
+        </td>
+        <td>
+          <select id="in_datasetlabeltype" onchange="updateCommands();">
+            <option value="Single">Single</option>
+            <option value="Multi">Multi</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Dataset - Source Type
+        </td>
+        <td>
+          <select id="in_datasetsourcetype" onchange="updateCommands();">
+            <option value="File">File</option>
+            <option value="URL">URL</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Dataset - Source (Filename or URL)
+        </td>
+        <td>
+          <input id="in_datasetsource" class="width100" type="text" onchange="updateCommands();" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Dataset - Name
+        </td>
+        <td>
+          <input id="in_datasetname" class="width100" type="text" onchange="updateCommands();" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Dataset - ID
+        </td>
+        <td>
+          <input id="in_datasetid" class="width100" type="text" onchange="updateCommands();" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Model - ID
+        </td>
+        <td>
+          <input id="in_modelid" class="width100" type="text" onchange="updateCommands();" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Model - Name
+        </td>
+        <td>
+          <input id="in_modelname" class="width100" type="text" onchange="updateCommands();" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Training - Feedback
+        </td>
+        <td>
+          <select id="in_feedback" onchange="updateCommands();">
+            <option value="notuse">Not use</option>
+            <option value="use">Use</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Training - Global Dataset
+        </td>
+        <td>
+          <select id="in_globaldataset" onchange="updateCommands();">
+            <option value="notuse">Not use</option>
+            <option value="other">Other</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Predict - Source Type
+        </td>
+        <td>
+          <select id="in_predictsourcetype" onchange="updateCommands();">
+            <option value="File">File</option>
+            <option value="URL">URL</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Predict - Source (Filename or URL)
+        </td>
+        <td>
+          <input id="in_predictsource" class="width100" type="text" onchange="updateCommands();" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Feedback - Source Type
+        </td>
+        <td>
+          <select id="in_feedbacksourcetype" onchange="updateCommands();">
+            <option value="File">File</option>
+            <option value="URL">URL</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Feedback - Source (Filename or URL)
+        </td>
+        <td>
+          <input id="in_feedbacksource" class="width100" type="text" onchange="updateCommands();" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Feedback - Expected Label
+        </td>
+        <td>
+          <input id="in_feedbackexpectedlabel" class="width100" type="text" onchange="updateCommands();" />
+        </td>
+      </tr>
+    </table>
+
+    <h2>Commands</h2>
+    <table class="width100">
+      <tr>
+        <td>
+          API Usage
+        </td>
+        <td>
+          <button onclick='copyToClipboard("out_apiusage");'>Copy</button>
+        </td>
+        <td class="width100">
+          <input id="out_apiusage" class="width100" type="text" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Dataset - upload
+        </td>
+        <td>
+          <button onclick='copyToClipboard("out_datasetupload");'>Copy</button>
+        </td>
+        <td>
+          <input id="out_datasetupload" class="width100" type="text" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Dataset - status check
+        </td>
+        <td>
+          <button onclick='copyToClipboard("out_datasetstatuscheck");'>Copy</button>
+        </td>
+        <td>
+          <input id="out_datasetstatuscheck" class="width100" type="text" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Dataset - list
+        </td>
+        <td>
+          <button onclick='copyToClipboard("out_datasetlist");'>Copy</button>
+        </td>
+        <td>
+          <input id="out_datasetlist" class="width100" type="text" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Dataset - delete
+        </td>
+        <td>
+          <button onclick='copyToClipboard("out_datasetdelete");'>Copy</button>
+        </td>
+        <td>
+          <input id="out_datasetdelete" class="width100" type="text" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Training - train
+        </td>
+        <td>
+          <button onclick='copyToClipboard("out_training");'>Copy</button>
+        </td>
+        <td>
+          <input id="out_training" class="width100" type="text" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Training - retrain
+        </td>
+        <td>
+          <button onclick='copyToClipboard("out_retraining");'>Copy</button>
+        </td>
+        <td>
+          <input id="out_retraining" class="width100" type="text" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Training - status check
+        </td>
+        <td>
+          <button onclick='copyToClipboard("out_trainingstatuscheck");'>Copy</button>
+        </td>
+        <td>
+          <input id="out_trainingstatuscheck" class="width100" type="text" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Model - list
+        </td>
+        <td>
+          <button onclick='copyToClipboard("out_modellist");'>Copy</button>
+        </td>
+        <td>
+          <input id="out_modellist" class="width100" type="text" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Model - metrics
+        </td>
+        <td>
+          <button onclick='copyToClipboard("out_modelmetrics");'>Copy</button>
+        </td>
+        <td>
+          <input id="out_modelmetrics" class="width100" type="text" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Predict
+        </td>
+        <td>
+          <button onclick='copyToClipboard("out_predict");'>Copy</button>
+        </td>
+        <td>
+          <input id="out_predict" class="width100" type="text" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Feedback
+        </td>
+        <td>
+          <button onclick='copyToClipboard("out_feedback");'>Copy</button>
+        </td>
+        <td>
+          <input id="out_feedback" class="width100" type="text" />
+        </td>
+      </tr>
+    </table>
+
+    <script type="text/javascript">
+      function updateCommands() {
+        //API Usage
+        if ("" != document.getElementById('in_token').value) {
+          console.log("api_usage");
+          var o = 'curl -X GET -H "Authorization: Bearer ' + document.getElementById('in_token').value + '" -H "Cache-Control: no-cache" ';
+          o += baseurl + 'apiusage';
+          document.getElementById('out_apiusage').value = o;
+        } else {
+          return;
+        }
+
+        //Dataset - upload
+        if ("" != document.getElementById('in_datasetsource').value) {
+          console.log("dataset");
+          var o = 'curl -X POST -H "Authorization: Bearer ' + document.getElementById('in_token').value + '" -H "Cache-Control: no-cache" -H "Content-Type: multipart/form-data" ';
+
+          if ("File" == document.getElementById('in_datasetsourcetype').value) {
+            o += '-F "data=@' + document.getElementById('in_datasetsource').value + '" ';
+          } else if ("URL" == document.getElementById('in_datasetsourcetype').value) {
+            o += '-F "path=' + document.getElementById('in_datasetsource').value + '" ';
+          } else {
+            o = "";
+          }
+
+          if ("Single" == document.getElementById('in_datasetlabeltype').value) {
+            o += '-F "type=image" ';
+          } else if ("Multi" == document.getElementById('in_datasetlabeltype').value) {
+            o += '-F "type=image-multi-label" ';
+          } else {
+            o = "";
+          }
+
+          if ("" != o) {
+            if ("" != document.getElementById('in_datasetname').value) {
+              o += '-F "name=' + document.getElementById('in_datasetname').value + '" ';
+            }
+            o += baseurl + 'vision/datasets/upload'
+          }
+
+          document.getElementById('out_datasetupload').value = o;
+        }
+
+        //Dataset - status check
+        if ("" != document.getElementById('in_datasetid').value) {
+          console.log("dataset status check");
+          var o = 'curl -X GET -H "Authorization: Bearer ' + document.getElementById('in_token').value + '" -H "Cache-Control: no-cache" ';
+          o += baseurl + 'vision/datasets/' + document.getElementById('in_datasetid').value;
+          document.getElementById('out_datasetstatuscheck').value = o;
+        }
+
+        //Dataset - list
+        if ("" != document.getElementById('in_token').value) {
+          console.log("dataset list");
+          var o = 'curl -X GET -H "Authorization: Bearer ' + document.getElementById('in_token').value + '" -H "Cache-Control: no-cache" ';
+          o += baseurl + 'vision/datasets';
+          document.getElementById('out_datasetlist').value = o;
+        }
+
+        //Dataset - delete
+        if ("" != document.getElementById('in_token').value && "" != document.getElementById('in_datasetid').value) {
+          console.log("dataset list");
+          var o = 'curl -X DELETE -H "Authorization: Bearer ' + document.getElementById('in_token').value + '" -H "Cache-Control: no-cache" ';
+          o += baseurl + 'vision/datasets/' + document.getElementById('in_datasetid').value;
+          document.getElementById('out_datasetdelete').value = o;
+        }
+
+        //Training - train
+        if ("" != document.getElementById('in_datasetid').value && "" != document.getElementById('in_modelname').value) {
+          console.log("training");
+          var o = 'curl -X POST -H "Authorization: Bearer ' + document.getElementById('in_token').value + '" -H "Cache-Control: no-cache" -H "Content-Type: multipart/form-data" ';
+          o += '-F "name=' + document.getElementById('in_modelname').value + '" ';
+          o += '-F "datasetId=' + document.getElementById('in_datasetid').value + '" ';
+
+          if ("notuse" != document.getElementById('in_feedback').value || "notuse" != document.getElementById('in_globaldataset').value) {
+            var params = [];
+
+            if ("use" == document.getElementById('in_feedback').value) {
+              params.push('\\"withFeedback\\":\\"true\\"');
+            }
+
+            if ("other" == document.getElementById('in_globaldataset').value) {
+              params.push('\\"withGlobalDatasetId\\":\\"1005161\\"');
+            }
+
+            o += '-F "trainParams={';
+            for (var i = 0; i < params.length; i++) {
+              if (i != 0) {
+                o += ',';
+              }
+              o += params[i];
+            }
+            o += '}" ';
+          }
+
+          o += baseurl + 'vision/train';
+          document.getElementById('out_training').value = o;
+        }
+
+        //Training - retrain
+        if ("" != document.getElementById('in_modelid').value) {
+          console.log("retraining");
+          var o = 'curl -X POST -H "Authorization: Bearer ' + document.getElementById('in_token').value + '" -H "Cache-Control: no-cache" -H "Content-Type: multipart/form-data" ';
+
+          if ("notuse" != document.getElementById('in_feedback').value || "notuse" != document.getElementById('in_globaldataset').value) {
+            var params = [];
+
+            if ("use" == document.getElementById('in_feedback').value) {
+              params.push('\\"withFeedback\\":\\"true\\"');
+            }
+
+            if ("other" == document.getElementById('in_globaldataset').value) {
+              params.push('\\"withGlobalDatasetId\\":\\"1005161\\"');
+            }
+
+            o += '-F "trainParams={';
+            for (var i = 0; i < params.length; i++) {
+              if (i != 0) {
+                o += ',';
+              }
+              o += params[i];
+            }
+            o += '}" ';
+          }
+
+          o += '-F "modelId=' + document.getElementById('in_modelid').value + '" ';
+
+          o += baseurl + 'vision/retrain';
+          document.getElementById('out_retraining').value = o;
+        }
+
+        //Training - status check
+        if ("" != document.getElementById('in_modelid').value) {
+          console.log("training status check");
+          var o = 'curl -X GET -H "Authorization: Bearer ' + document.getElementById('in_token').value + '" -H "Cache-Control: no-cache" ';
+          o += baseurl + 'vision/train/' + document.getElementById('in_modelid').value;
+          document.getElementById('out_trainingstatuscheck').value = o;
+        }
+
+        //Model - list
+        if ("" != document.getElementById('in_token').value && "" != document.getElementById('in_datasetid').value) {
+          console.log("model list");
+          var o = 'curl -X GET -H "Authorization: Bearer ' + document.getElementById('in_token').value + '" -H "Cache-Control: no-cache" ';
+          o += baseurl + 'vision/datasets/' + document.getElementById('in_datasetid').value + '/models';
+          document.getElementById('out_modellist').value = o;
+        }
+
+        //Model - metrics
+        if ("" != document.getElementById('in_token').value && "" != document.getElementById('in_modelid').value) {
+          console.log("model metrics");
+          var o = 'curl -X GET -H "Authorization: Bearer ' + document.getElementById('in_token').value + '" -H "Cache-Control: no-cache" ';
+          o += baseurl + 'vision/models/' + document.getElementById('in_modelid').value;
+          document.getElementById('out_modelmetrics').value = o;
+        }
+
+        //Predict
+        if ("" != document.getElementById('in_predictsource').value && "" != document.getElementById('in_modelid').value) {
+          console.log("predict");
+
+          var o = 'curl -X POST -H "Authorization: Bearer ' + document.getElementById('in_token').value + '" -H "Cache-Control: no-cache" -H "Content-Type: multipart/form-data" ';
+
+          if ("File" == document.getElementById('in_predictsourcetype').value) {
+            o += '-F "sampleContent=@' + document.getElementById('in_predictsource').value + '" ';
+          } else if ("URL" == document.getElementById('in_predictsourcetype').value) {
+            o += '-F "sampleLocation=' + document.getElementById('in_predictsource').value + '" ';
+          } else {
+            o = "";
+          }
+
+          if ("" != o) {
+            o += '-F "modelId=' + document.getElementById('in_modelid').value + '" ';
+            o += baseurl + 'vision/predict'
+          }
+
+          document.getElementById('out_predict').value = o;
+        }
+
+        //Feedback
+        if ("" != document.getElementById('in_feedbacksource').value && "" != document.getElementById('in_feedbackexpectedlabel').value && "" != document.getElementById('in_modelid')) {
+          console.log("feedback");
+          var o = 'curl -X POST -H "Authorization: Bearer ' + document.getElementById('in_token').value + '" -H "Cache-Control: no-cache" -H "Content-Type: multipart/form-data" ';
+
+          if ("File" == document.getElementById('in_feedbacksourcetype').value) {
+            o += '-F "data=@' + document.getElementById('in_feedbacksource').value + '" ';
+          } else if ("URL" == document.getElementById('in_feedbacksourcetype').value) {
+            o += '-F "path=' + document.getElementById('in_feedbacksource').value + '" ';
+          } else {
+            o = "";
+          }
+
+          if ("" != o) {
+            o += '-F "expectedLabel=' + document.getElementById('in_feedbackexpectedlabel').value + '" ';
+            o += '-F "modelId=' + document.getElementById('in_modelid').value + '" ';
+            o += baseurl + 'vision/feedback'
+          }
+
+          document.getElementById('out_feedback').value = o;
+        }
+
+      }
+
+      function copyToClipboard(idtag) {
+        document.getElementById(idtag).select();
+        document.execCommand("copy");
+        //alert('クリップボードにコピーしました。');
+      }
+
+      var baseurl = "https://api.einstein.ai/v2/";
+    </script>
+</body>
+
+</html>
